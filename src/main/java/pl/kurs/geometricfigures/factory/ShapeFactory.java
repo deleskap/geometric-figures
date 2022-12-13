@@ -26,7 +26,7 @@ public class ShapeFactory {
 
     }
 
-    public Shape create(CreateShapeCommand command){
+    public Shape createShape(CreateShapeCommand command){
         return creators.get(command.getType().toUpperCase(Locale.ROOT)).create(command.getParameters());
     }
 

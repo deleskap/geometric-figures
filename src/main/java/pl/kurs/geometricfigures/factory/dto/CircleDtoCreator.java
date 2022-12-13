@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class CircleDtoCreator implements ShapeDtoCreator {
 
-    ModelMapper mapper;
+    private final ModelMapper mapper;
 
     @Override
     public String getType() {

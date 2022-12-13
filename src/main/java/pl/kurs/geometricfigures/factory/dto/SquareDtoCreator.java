@@ -10,7 +10,7 @@ import pl.kurs.geometricfigures.model.dto.fullDto.SquareDto;
 @Service
 @AllArgsConstructor
 public class SquareDtoCreator implements ShapeDtoCreator {
-    ModelMapper mapper;
+    private final ModelMapper mapper;
 
     @Override
     public String getType() {
@@ -21,7 +21,6 @@ public class SquareDtoCreator implements ShapeDtoCreator {
     public ShapeDto create(Shape source) {
         //TODO walidacja parametrow
         SquareDto dto = mapper.map(source, SquareDto.class);
-
         return dto;
     }
 }

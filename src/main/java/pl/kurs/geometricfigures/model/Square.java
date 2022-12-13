@@ -22,7 +22,7 @@ public class Square extends Shape {
     private double width;
 
     @Override
-    public double getArea() {
+    public Double getArea() {
         return width*width;
     }
 

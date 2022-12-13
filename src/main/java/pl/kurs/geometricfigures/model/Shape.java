@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Shape implements Serializable, Identificationable, iShape {
+public abstract class Shape implements Serializable, Identificationable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -36,5 +36,9 @@ public abstract class Shape implements Serializable, Identificationable, iShape 
     private LocalDateTime lastModifiedAt;
     @LastModifiedBy
     private String lastModifiedBy;
+
+
+    public abstract Double getArea();
+    public abstract double getPerimeter();
 
 }

@@ -9,4 +9,6 @@ public interface IManagementService<T> {
     T edit(T entity);
     T get(long id);
     List<T> getAll();
+    String getType();
+
 }

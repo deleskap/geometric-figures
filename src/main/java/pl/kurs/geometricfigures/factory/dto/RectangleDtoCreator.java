@@ -15,7 +15,7 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class RectangleDtoCreator implements ShapeDtoCreator {
-    ModelMapper mapper;
+    private final ModelMapper mapper;
 
     @Override
     public String getType() {
