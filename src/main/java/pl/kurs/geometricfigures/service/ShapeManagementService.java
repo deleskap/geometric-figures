@@ -13,20 +13,20 @@ public class ShapeManagementService extends GenericManagementService<Shape, Shap
         super(repository, "SHAPE");
     }
 
-    public List<Shape> getAllByCreatedBy(String createdBy){
-        List<Shape> shapes = repository.getAllByCreatedBy(createdBy);
-        if (shapes.isEmpty()){
-            throw new RuntimeException();
-        }
-        return shapes;
-    }
+//    public List<Shape> getAllByCreatedBy(String createdBy){
+//        List<Shape> shapes = repository.getAllByCreatedBy(createdBy);
+//        if (shapes.isEmpty()){
+//            throw new RuntimeException();
+//        }
+//        return shapes;
+//    }
 
-    public List<Shape> getByArea(Double areaFrom, Double areaTo){
-        List<Shape> shapes = repository.getAllByAreaBeforeAndAreaAfter(areaFrom, areaTo);
-        if (shapes.isEmpty()){
-            throw new RuntimeException();
-        }
-        return shapes;
-    }
+//    public List<Shape> getByArea(Double areaFrom, Double areaTo){
+//        List<Shape> shapes = repository.getAllByAreaBeforeAndAreaAfter(areaFrom, areaTo);
+//        if (shapes.isEmpty()){
+//            throw new RuntimeException();
+//        }
+//        return shapes;
+//    }
 
 }

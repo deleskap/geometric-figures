@@ -1,18 +1,18 @@
 package pl.kurs.geometricfigures.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+@Data
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+//@DiscriminatorValue(value = "circle")
 public class Circle extends Shape{
     @Column(nullable = false)
     private double radius;

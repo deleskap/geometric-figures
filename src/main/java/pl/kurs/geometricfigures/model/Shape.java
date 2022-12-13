@@ -1,6 +1,8 @@
 package pl.kurs.geometricfigures.model;
 
 import javax.persistence.*;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,12 +17,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
-@Getter
-@Setter
+@Data
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+//@DiscriminatorColumn(name = "type")
 public abstract class Shape implements Serializable, Identificationable {
 
     @Id

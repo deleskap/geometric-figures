@@ -1,22 +1,18 @@
 package pl.kurs.geometricfigures.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import pl.kurs.geometricfigures.model.dto.fullDto.ShapeDto;
-import pl.kurs.geometricfigures.model.dto.fullDto.SquareDto;
-
-import java.util.Locale;
-
+@Data
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+//@DiscriminatorValue(value = "square")
 public class Square extends Shape {
     @Column(nullable = false)
     private double width;

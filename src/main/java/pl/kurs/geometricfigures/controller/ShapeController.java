@@ -66,14 +66,41 @@ public class ShapeController {
     }
 
     @GetMapping(value = "/parameters")
-    public ResponseEntity<List<ShapeDto>> getByParameters (@RequestParam Map<String, String> parameters){
-
+    public ResponseEntity<List<ShapeDto>> getByParameters (@RequestParam Map<String, Object> parameters){
+        List<Shape> shapeList;
 
         //List<Shape> shapeList = shapeManagementService.getAllByCreatedBy(parameters.get("createdBy"));
 //        List<Shape> shapeList = managementServices.get(parameters.get("type")).getAll();
-        List<Shape> shapeList = shapeManagementService.getByArea(0.0,100.0);
+//        List<Shape> shapeList = shapeManagementService.getByArea(0.0,100.0);
 
-        List<ShapeDto> shapeDtoList = shapeList.stream().map(x -> shapeFactory.createDto(x)).collect(Collectors.toList());
+        if (parameters.containsKey("type")){
+            shapeList = managementServices.get(parameters.get("type")).getAll();
+        }
+        else{
+            shapeList = shapeManagementService.getAll();
+        }
+
+        if(parameters.containsKey("areaFrom")&parameters.containsKey("areaTo")){
+            shapeList.stream()
+                    .filter(x -> x.getArea()<Double.valueOf(parameters.get("areaTo").toString()))
+                    .filter(x -> x.getArea()>Double.valueOf(parameters.get("areaFrom").toString()))
+                    .collect(Collectors.toList());
+        }
+        if(parameters.containsKey("perimeterFrom")&parameters.containsKey("perimeterTo")){
+            shapeList.stream()
+                    .filter(x -> x.getPerimeter()>Double.valueOf(parameters.get("perimeterFrom").toString()))
+                    .filter(x -> x.getPerimeter()>Double.valueOf(parameters.get("perimeterTo").toString()))
+                    .collect(Collectors.toList());
+        }
+        if(parameters.containsKey("createdBy")){
+            shapeList.stream()
+                    .filter(x -> x.getCreatedBy()==parameters.get("createdBy"))
+                    .collect(Collectors.toList());
+        }
+        
+        List<ShapeDto> shapeDtoList = shapeList.stream()
+                .map(x -> shapeFactory.createDto(x))
+                .collect(Collectors.toList());
         return new ResponseEntity<>(shapeDtoList, HttpStatus.OK);
     }
 
