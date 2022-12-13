@@ -6,10 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class GenericManagementService<T extends Identificationable, R extends JpaRepository<T, Long>> implements IManagementService<T> {
 
@@ -73,5 +70,10 @@ public class GenericManagementService<T extends Identificationable, R extends Jp
     @Override
     public String getType() {
         return entity;
+    }
+
+    @Override
+    public List<T> getAllByParameters(Map<String, Object> parameters) {
+        return repository.findAll();
     }
 }

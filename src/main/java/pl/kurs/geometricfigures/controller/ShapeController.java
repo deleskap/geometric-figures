@@ -73,9 +73,13 @@ public class ShapeController {
 //        List<Shape> shapeList = managementServices.get(parameters.get("type")).getAll();
 //        List<Shape> shapeList = shapeManagementService.getByArea(0.0,100.0);
 
-        if (parameters.containsKey("type")){
+        if (parameters.containsKey("type")&parameters.size()==1){
             shapeList = managementServices.get(parameters.get("type")).getAll();
+        } else if (parameters.containsKey("type")&parameters.size()>1){
+            shapeList = managementServices.get(parameters.get("type")).getAllByParameters(parameters);
         }
+
+
         else{
             shapeList = shapeManagementService.getAll();
         }
@@ -94,7 +98,7 @@ public class ShapeController {
         }
         if(parameters.containsKey("createdBy")){
             shapeList.stream()
-                    .filter(x -> x.getCreatedBy()==parameters.get("createdBy"))
+                    .filter(x -> x.getCreatedBy()==parameters.get("createdBy").toString())
                     .collect(Collectors.toList());
         }
 
