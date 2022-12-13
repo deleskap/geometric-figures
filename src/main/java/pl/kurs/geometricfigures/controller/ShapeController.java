@@ -97,7 +97,7 @@ public class ShapeController {
                     .filter(x -> x.getCreatedBy()==parameters.get("createdBy"))
                     .collect(Collectors.toList());
         }
-        
+
         List<ShapeDto> shapeDtoList = shapeList.stream()
                 .map(x -> shapeFactory.createDto(x))
                 .collect(Collectors.toList());
