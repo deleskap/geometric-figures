@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface CircleRepository extends JpaRepository<Circle, Long> {
     List<Circle> findByRadiusBetween(double minRadius, double maxRadius);
-
 }

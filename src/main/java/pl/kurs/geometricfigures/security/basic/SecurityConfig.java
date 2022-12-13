@@ -30,11 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/shapes","/shapes/*").hasAnyRole("CREATOR", "USER")
-                .antMatchers(HttpMethod.POST,"/shapes/*").hasRole("CREATOR")
-                .antMatchers(HttpMethod.DELETE,"/shapes/*").hasRole("CREATOR")
+                .antMatchers(HttpMethod.GET, "/shapes", "/shapes/*").hasAnyRole("CREATOR", "USER")
+                .antMatchers(HttpMethod.POST, "/shapes/*").hasRole("CREATOR")
+                .antMatchers(HttpMethod.DELETE, "/shapes/*").hasRole("CREATOR")
                 .and().csrf().disable().httpBasic();
-
 
 
     }

@@ -1,8 +1,5 @@
 package pl.kurs.geometricfigures.model;
 
-import javax.persistence.*;
-
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,17 +10,19 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pl.kurs.geometricfigures.service.Identificationable;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-//@DiscriminatorColumn(name = "type")
-public abstract class Shape implements Serializable, Identificationable {
+public abstract class Shape implements Serializable, Identificationable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -39,8 +38,8 @@ public abstract class Shape implements Serializable, Identificationable {
     @LastModifiedBy
     private String lastModifiedBy;
 
-
     public abstract Double getArea();
+
     public abstract double getPerimeter();
 
 }

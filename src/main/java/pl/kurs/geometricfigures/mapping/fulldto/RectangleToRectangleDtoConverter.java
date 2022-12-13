@@ -6,13 +6,10 @@ import org.springframework.stereotype.Service;
 import pl.kurs.geometricfigures.model.Rectangle;
 import pl.kurs.geometricfigures.model.dto.fullDto.RectangleDto;
 
-
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 @Service
-public class RectangleToRectangleDtoConverter implements Converter<Rectangle, RectangleDto>,ShapeToShapeDtoConverter {
+public class RectangleToRectangleDtoConverter implements Converter<Rectangle, RectangleDto>, ShapeToShapeDtoConverter {
     @Override
     public RectangleDto convert(MappingContext<Rectangle, RectangleDto> mappingContext) {
         Rectangle source = mappingContext.getSource();

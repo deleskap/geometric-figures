@@ -5,7 +5,6 @@ import pl.kurs.geometricfigures.model.Circle;
 import pl.kurs.geometricfigures.repository.CircleRepository;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @Component
@@ -16,7 +15,11 @@ public class CircleManagementService extends GenericManagementService<Circle, Ci
 
     @Override
     public List<Circle> getAllByParameters(Map<String, Object> parameters) {
-        return repository.findByRadiusBetween(Double.valueOf(parameters.get("radiusFrom").toString()),Double.valueOf(parameters.get("radiusTo").toString()));
+
+        double radiusFrom = parameters.containsKey("radiusFrom") ? Double.valueOf(parameters.get("radiusFrom").toString()) : Double.MIN_VALUE;
+        double radiusTo = parameters.containsKey("radiusTo") ? Double.valueOf(parameters.get("radiusTo").toString()) : Double.MAX_VALUE;
+
+        return repository.findByRadiusBetween(radiusFrom, radiusTo);
     }
 }
 

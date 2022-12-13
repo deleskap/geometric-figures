@@ -18,6 +18,4 @@ public class SquareSimpleDto implements ShapeSimpleDto {
     private String lastModifiedBy;
     private double area;
     private double perimeter;
-
-
 }

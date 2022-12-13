@@ -1,20 +1,22 @@
 package pl.kurs.geometricfigures.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.validation.constraints.Positive;
 
-@Data
+@Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-//@DiscriminatorValue(value = "circle")
-public class Circle extends Shape{
+public class Circle extends Shape {
     @Column(nullable = false)
+    @Positive(message = "Radius should be positive value")
     private double radius;
 
     @Override
@@ -26,4 +28,5 @@ public class Circle extends Shape{
     public double getPerimeter() {
         return 2 * Math.PI * radius;
     }
+
 }

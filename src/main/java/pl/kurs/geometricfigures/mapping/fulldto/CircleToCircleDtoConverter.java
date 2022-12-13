@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.kurs.geometricfigures.model.Circle;
 import pl.kurs.geometricfigures.model.dto.fullDto.CircleDto;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 
 @Service

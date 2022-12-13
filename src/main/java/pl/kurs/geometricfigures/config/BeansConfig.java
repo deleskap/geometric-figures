@@ -17,15 +17,15 @@ import java.util.Set;
 public class BeansConfig {
 
     @Bean
-    public ModelMapper getModelMapper(Set<Converter> converters){
+    public ModelMapper getModelMapper(Set<Converter> converters) {
         ModelMapper modelMapper = new ModelMapper();
         converters.forEach(modelMapper::addConverter);
         return modelMapper;
     }
 
     @Bean
-    public AuditorAware<String> auditorProvider(){
-        return () -> Optional.of( ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+    public AuditorAware<String> auditorProvider() {
+        return () -> Optional.of(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
     }
 
 }

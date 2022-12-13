@@ -1,7 +1,6 @@
 package pl.kurs.geometricfigures.service;
 
 import org.springframework.stereotype.Component;
-import pl.kurs.geometricfigures.model.Rectangle;
 import pl.kurs.geometricfigures.model.Square;
 import pl.kurs.geometricfigures.repository.SquareRepository;
 
@@ -16,8 +15,12 @@ public class SquareManagementService extends GenericManagementService<Square, Sq
 
     @Override
     public List<Square> getAllByParameters(Map<String, Object> parameters) {
-        return repository.findByWidthBetween(Double.valueOf(parameters.get("widthFrom").toString()),
-                Double.valueOf(parameters.get("widthTo").toString()));
+
+        double widthFrom = parameters.containsKey("widthFrom") ? Double.valueOf(parameters.get("widthFrom").toString()) : Double.MIN_VALUE;
+        double widthTo = parameters.containsKey("widthTo") ? Double.valueOf(parameters.get("widthTo").toString()) : Double.MAX_VALUE;
+
+        return repository.findByWidthBetween(widthFrom,
+                widthTo);
     }
 
 
