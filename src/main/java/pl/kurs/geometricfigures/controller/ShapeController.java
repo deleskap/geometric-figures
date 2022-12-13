@@ -40,7 +40,7 @@ public class ShapeController {
     @PostConstruct
     public void postConstruct() {
         this.managementServices = managementServicesSet.stream()
-                .collect(Collectors.toMap(x -> x.getType(), Function.identity()));
+                .collect(Collectors.toMap(GenericManagementService::getType, Function.identity()));
     }
 
     @PostMapping("/init")
@@ -60,7 +60,7 @@ public class ShapeController {
     public ResponseEntity<List<ShapeDto>> getAllShapes() {
         List<ShapeDto> shapeDtoList = shapeManagementService.getAll()
                 .stream()
-                .map(x -> shapeFactory.createDto(x))
+                .map(shapeFactory::createDto)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(shapeDtoList, HttpStatus.OK);
     }
@@ -76,7 +76,7 @@ public class ShapeController {
         if (!parameters.containsKey("type")) {
             shapeList = shapeManagementService.getAll();
         } else {
-            if (!managementServices.keySet().contains(parameters.get("type")))
+            if (!managementServices.containsKey(parameters.get("type")))
                 throw new BadRequestException("Specified shape not found!");
 
             if (parameters.containsKey("type") & numberOfDifferentKeywords >= 1
@@ -87,16 +87,17 @@ public class ShapeController {
             }
         }
 
+
         if (parameters.containsKey("areaFrom") & parameters.containsKey("areaTo")) {
             shapeList = shapeList.stream()
-                    .filter(x -> x.getArea() < Double.valueOf(parameters.get("areaTo").toString()))
-                    .filter(x -> x.getArea() > Double.valueOf(parameters.get("areaFrom").toString()))
+                    .filter(x -> x.getArea() < Double.parseDouble(parameters.get("areaTo").toString()))
+                    .filter(x -> x.getArea() > Double.parseDouble(parameters.get("areaFrom").toString()))
                     .collect(Collectors.toList());
         }
         if (parameters.containsKey("perimeterFrom") & parameters.containsKey("perimeterTo")) {
             shapeList = shapeList.stream()
-                    .filter(x -> x.getPerimeter() > Double.valueOf(parameters.get("perimeterFrom").toString()))
-                    .filter(x -> x.getPerimeter() > Double.valueOf(parameters.get("perimeterTo").toString()))
+                    .filter(x -> x.getPerimeter() > Double.parseDouble(parameters.get("perimeterFrom").toString()))
+                    .filter(x -> x.getPerimeter() > Double.parseDouble(parameters.get("perimeterTo").toString()))
                     .collect(Collectors.toList());
         }
         if (parameters.containsKey("createdBy")) {
@@ -105,7 +106,7 @@ public class ShapeController {
                     .collect(Collectors.toList());
         }
         List<ShapeDto> shapeDtoList = shapeList.stream()
-                .map(x -> shapeFactory.createDto(x))
+                .map(shapeFactory::createDto)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(shapeDtoList, HttpStatus.OK);
     }
