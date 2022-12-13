@@ -76,10 +76,11 @@ public class ShapeController {
         if (!parameters.containsKey("type")) {
             shapeList = shapeManagementService.getAll();
         } else {
+            if (!managementServices.keySet().contains(parameters.get("type")))
+                throw new BadRequestException("Specified shape not found!");
+
             if (parameters.containsKey("type") & numberOfDifferentKeywords >= 1
             ) {
-                if (!managementServices.keySet().contains(parameters.get("type")))
-                    throw new BadRequestException("Specified shape not found!");
                 shapeList = managementServices.get(parameters.get("type")).getAllByParameters(parameters);
             } else {
                 shapeList = managementServices.get(parameters.get("type")).getAll();
