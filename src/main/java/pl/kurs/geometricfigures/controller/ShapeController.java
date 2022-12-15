@@ -4,21 +4,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.kurs.geometricfigures.exceptions.BadRequestException;
 import pl.kurs.geometricfigures.factory.ShapeFactory;
-import pl.kurs.geometricfigures.model.Circle;
-import pl.kurs.geometricfigures.model.Rectangle;
 import pl.kurs.geometricfigures.model.Shape;
-import pl.kurs.geometricfigures.model.Square;
 import pl.kurs.geometricfigures.model.command.CreateShapeCommand;
 import pl.kurs.geometricfigures.model.dto.fullDto.ShapeDto;
-import pl.kurs.geometricfigures.service.GenericManagementService;
 import pl.kurs.geometricfigures.service.ShapeManagementService;
 
-import javax.annotation.PostConstruct;
 import javax.validation.Valid;
-import java.util.*;
-import java.util.function.Function;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,21 +28,12 @@ public class ShapeController {
         this.shapeFactory = shapeFactory;
     }
 
-    @GetMapping
-    public ResponseEntity<List<ShapeDto>> getAllShapes() {
-        List<ShapeDto> shapeDtoList = shapeManagementService.getAll()
-                .stream()
-                .map(shapeFactory::createDto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(shapeDtoList, HttpStatus.OK);
-    }
-
     @PostMapping
     public ResponseEntity<ShapeDto> createShape(@RequestBody @Valid CreateShapeCommand command) {
         Shape shape = shapeFactory.createShape(command);
         shape = shapeManagementService.add(shape);
         ShapeDto dto = shapeFactory.createDto(shape);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     @GetMapping("/parameters")
@@ -60,3 +45,14 @@ public class ShapeController {
         return new ResponseEntity<>(shapeDtoList, HttpStatus.OK);
     }
 }
+
+
+//
+//    @GetMapping
+//    public ResponseEntity<List<ShapeDto>> getAllShapes() {
+//        List<ShapeDto> shapeDtoList = shapeManagementService.getAll()
+//                .stream()
+//                .map(shapeFactory::createDto)
+//                .collect(Collectors.toList());
+//        return new ResponseEntity<>(shapeDtoList, HttpStatus.OK);
+//    }

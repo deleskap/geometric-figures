@@ -13,7 +13,6 @@ import pl.kurs.geometricfigures.service.Identificationable;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 
 @Getter
@@ -22,7 +21,7 @@ import java.util.Map;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Shape implements Serializable, Identificationable{
+public abstract class Shape implements Serializable, Identificationable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)

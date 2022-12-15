@@ -1,14 +1,11 @@
 package pl.kurs.geometricfigures.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.Positive;
-import java.util.Map;
 
 @Getter
 @Setter
