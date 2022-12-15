@@ -10,11 +10,13 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -27,15 +29,35 @@ public class ShapeManagementService extends GenericManagementService<Shape, Shap
         super(repository);
     }
 
-    public List<Shape> findShapes(Map<String, Object> parameters) {
+    public List<Shape> findShapes(Map<String, Object> parameters) throws ClassNotFoundException, NoSuchFieldException {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Shape> query = builder.createQuery(Shape.class);
         Root<Shape> root = query.from(Shape.class);
 
         if (parameters.containsKey("type")) {
             Object type = parameters.get("type");
+            Class<?> subclass = Class.forName(type.toString());
+            Root<?> root2 = query.from(subclass);
+            Set<String> keys = parameters.keySet();
+
+            for (String key : keys) {
+                if (key.endsWith("From") || key.endsWith("To")) {
+                    String fieldName = key.substring(0, key.length() - 4);
+                    // Use reflection to get the value of the field from the Map
+                    Object fieldValue = parameters.get(key);
+                    Field field = subclass.getDeclaredField(fieldName);
+                    field.setAccessible(true);
+//
+//                    // Add a condition to the query to match the field value
+//                    if (key.endsWith("From")) {
+//                        query.where(builder.greaterThanOrEqualTo(root2.get(fieldName), fieldValue));
+//                    } else {
+//                        query.where(builder.lessThanOrEqualTo(root2.get(fieldName), fieldValue));
+//                    }
+                }
+
             query.where(builder.equal(root.get("type"), type.toString()));
-        }
+        }}
         if (parameters.containsKey("createdBy")) {
             Object createdBy = parameters.get("createdBy");
             query.where(builder.equal(root.get("createdBy"), createdBy));
@@ -53,8 +75,13 @@ public class ShapeManagementService extends GenericManagementService<Shape, Shap
             query.where(builder.lessThanOrEqualTo(root.get("createdAt"), createdDateTo));
         }
 
+
         TypedQuery<Shape> typedQuery = entityManager.createQuery(query);
         List<Shape> shapeList = typedQuery.getResultList();
+
+        shapeList = shapeList.stream()
+                .filter(s -> s.getArea() <= Double.parseDouble(parameters.get("areaTo").toString()))
+                .collect(Collectors.toList());
 
         if (parameters.containsKey("areaTo")) {
             shapeList = shapeList.stream()
@@ -81,20 +108,9 @@ public class ShapeManagementService extends GenericManagementService<Shape, Shap
         }
 
 
+
         return shapeList;
     }
-//    public <T extends Shape> List<T> getShapes(Class<T> type, Map<String, Object> parameters) {
-//        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-//        CriteriaQuery<T> query = builder.createQuery(type);
-//        Root<T> root = query.from(type);
-//        query.select(root);
-//
-//        if (parameters.containsKey("createdBy")) {
-//            Object createdBy = parameters.get("createdBy");
-//            query.where(builder.equal(root.get("createdBy"), createdBy));
-//        }
-//        return entityManager.createQuery(query).getResultList();
-//    }
 
 
 }

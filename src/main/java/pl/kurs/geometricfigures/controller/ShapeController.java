@@ -52,7 +52,7 @@ public class ShapeController {
     }
 
     @GetMapping("/parameters")
-    public ResponseEntity<List<ShapeDto>> getShapesByParameters(@RequestParam Map<String, Object> parameters) throws NoSuchFieldException {
+    public ResponseEntity<List<ShapeDto>> getShapesByParameters(@RequestParam Map<String, Object> parameters) throws NoSuchFieldException, ClassNotFoundException {
 
         List<Shape> shapeList = shapeManagementService.findShapes(parameters);
         List<ShapeDto> shapeDtoList = shapeList.stream().map(x -> shapeFactory.createDto(x))
