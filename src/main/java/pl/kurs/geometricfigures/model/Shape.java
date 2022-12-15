@@ -19,7 +19,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Shape implements Serializable, Identificationable{
@@ -37,6 +37,8 @@ public abstract class Shape implements Serializable, Identificationable{
     private LocalDateTime lastModifiedAt;
     @LastModifiedBy
     private String lastModifiedBy;
+
+    private String type;
 
     public abstract Double getArea();
 

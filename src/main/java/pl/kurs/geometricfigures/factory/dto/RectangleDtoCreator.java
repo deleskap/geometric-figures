@@ -19,7 +19,6 @@ public class RectangleDtoCreator implements ShapeDtoCreator {
 
     @Override
     public ShapeDto create(Shape source) {
-        RectangleDto dto = mapper.map(source, RectangleDto.class);
-        return dto;
+        return mapper.map(source, RectangleDto.class);
     }
 }

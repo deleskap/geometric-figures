@@ -20,7 +20,6 @@ public class CircleDtoCreator implements ShapeDtoCreator {
 
     @Override
     public ShapeDto create(Shape source) {
-        CircleDto dto = mapper.map(source, CircleDto.class);
-        return dto;
+        return  mapper.map(source, CircleDto.class);
     }
 }

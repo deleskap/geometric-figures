@@ -19,7 +19,6 @@ public class SquareDtoCreator implements ShapeDtoCreator {
 
     @Override
     public ShapeDto create(Shape source) {
-        SquareDto dto = mapper.map(source, SquareDto.class);
-        return dto;
+        return mapper.map(source, SquareDto.class);
     }
 }

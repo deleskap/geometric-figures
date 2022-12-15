@@ -12,12 +12,16 @@ import javax.validation.constraints.Positive;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 public class Circle extends Shape {
-    @Column(nullable = false)
     @Positive(message = "Radius should be positive value")
     private double radius;
+
+    public Circle(double radius) {
+        this.radius = radius;
+        super.setType("CIRCLE");
+    }
 
     @Override
     public Double getArea() {

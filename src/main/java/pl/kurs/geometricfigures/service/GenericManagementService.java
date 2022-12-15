@@ -14,12 +14,10 @@ import java.util.Optional;
 public class GenericManagementService<T extends Identificationable, R extends JpaRepository<T, Long>> implements IManagementService<T> {
 
     protected R repository;
-    protected String entity;
 
     //TODO exceptions, globalexceptionhandler
-    public GenericManagementService(R repository, String entity) {
+    public GenericManagementService(R repository) {
         this.repository = repository;
-        this.entity = entity;
     }
 
     @Override
@@ -67,16 +65,6 @@ public class GenericManagementService<T extends Identificationable, R extends Jp
 
     @Override
     public List<T> getAll() {
-        return repository.findAll();
-    }
-
-    @Override
-    public String getType() {
-        return entity;
-    }
-
-    @Override
-    public List<T> getAllByParameters(Map<String, Object> parameters) {
         return repository.findAll();
     }
 

@@ -6,6 +6,16 @@ import pl.kurs.geometricfigures.repository.ShapeRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -14,72 +24,80 @@ public class ShapeManagementService extends GenericManagementService<Shape, Shap
     EntityManager entityManager;
 
     public ShapeManagementService(ShapeRepository repository) {
-        super(repository, "SHAPE");
+        super(repository);
     }
 
-//    public List<Shape> getByAreaBetween(double min, double max) {
-//        return repository.findByAreaBetween(min, max);
-//    }
+    public List<Shape> findShapes(Map<String, Object> parameters) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Shape> query = builder.createQuery(Shape.class);
+        Root<Shape> root = query.from(Shape.class);
+
+        if (parameters.containsKey("type")) {
+            Object type = parameters.get("type");
+            query.where(builder.equal(root.get("type"), type.toString()));
+        }
+        if (parameters.containsKey("createdBy")) {
+            Object createdBy = parameters.get("createdBy");
+            query.where(builder.equal(root.get("createdBy"), createdBy));
+        }
+        if (parameters.containsKey("createdAtFrom")) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(parameters.get("createdAtFrom").toString(), formatter);
+            LocalDateTime createdDateFrom = date.atStartOfDay();
+            query.where(builder.greaterThanOrEqualTo(root.get("createdAt"), createdDateFrom));
+        }
+        if (parameters.containsKey("createdAtTo")) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(parameters.get("createdAtTo").toString(), formatter);
+            LocalDateTime createdDateTo = date.atStartOfDay();
+            query.where(builder.lessThanOrEqualTo(root.get("createdAt"), createdDateTo));
+        }
+
+        TypedQuery<Shape> typedQuery = entityManager.createQuery(query);
+        List<Shape> shapeList = typedQuery.getResultList();
+
+        if (parameters.containsKey("areaTo")) {
+            shapeList = shapeList.stream()
+                    .filter(s -> s.getArea() <= Double.parseDouble(parameters.get("areaTo").toString()))
+                    .collect(Collectors.toList());
+        }
+
+        if (parameters.containsKey("areaFrom")) {
+            shapeList = shapeList.stream()
+                    .filter(s -> s.getArea() >= Double.parseDouble(parameters.get("areaFrom").toString()))
+                    .collect(Collectors.toList());
+        }
+
+        if (parameters.containsKey("perimeterTo")) {
+            shapeList = shapeList.stream()
+                    .filter(s -> s.getArea() <= Double.parseDouble(parameters.get("perimeterTo").toString()))
+                    .collect(Collectors.toList());
+        }
+
+        if (parameters.containsKey("perimeterFrom")) {
+            shapeList = shapeList.stream()
+                    .filter(s -> s.getArea() >= Double.parseDouble(parameters.get("perimeterFrom").toString()))
+                    .collect(Collectors.toList());
+        }
 
 
-//    public List<Shape> getByParameters(Map<String, Object> parameters) {
-//
-//        double areaTo = Double.valueOf(parameters.get("areaTo").toString());
-//        double areaFrom = Double.valueOf(parameters.get("areaFrom").toString());
-//
+        return shapeList;
+    }
+//    public <T extends Shape> List<T> getShapes(Class<T> type, Map<String, Object> parameters) {
 //        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-//        CriteriaQuery<Shape> criteria = builder.createQuery(Shape.class);
+//        CriteriaQuery<T> query = builder.createQuery(type);
+//        Root<T> root = query.from(type);
+//        query.select(root);
 //
-//        Root<Shape> root = criteria.from(Shape.class);
-//
-//        Expression<Double> area = root.get("area");
-//
-//        Predicate areaPredicate = builder.between(area, areaFrom, areaTo);
-//
-//        criteria.where(areaPredicate);
-//
-//
-//        return entityManager.createQuery(criteria).getResultList();
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-//        Root<Shape> treatedRoot = cb.treat(root, Shape.class);
-//        Expression<Double> area = treatedRoot.get("getArea");
-////        predicate = cb.and(predicate, cb.between(areaFunction, parameters.get("areaFrom").toString(), parameters.get("areaTo")));
-//        predicate = cb.and(predicate, cb.between(
-//                areaFunction,
-//                Double.valueOf(parameters.get("areaFrom").toString()),
-//                Double.valueOf(parameters.get("areaTo").toString())));
-//
-//        query.where(predicate);
-//        predicates.add(cb.equal(root.get("createdBy"), parameters.get("createdBy")));
-//        predicates.add(cb.equal(root.get("radius"), parameters.get("radius")));
-//        Predicate predicate = cb.conjunction();
-    }
-//    public List<Shape> getAllByCreatedBy(String createdBy){
-//        List<Shape> shapes = repository.getAllByCreatedBy(createdBy);
-//        if (shapes.isEmpty()){
-//            throw new RuntimeException();
+//        if (parameters.containsKey("createdBy")) {
+//            Object createdBy = parameters.get("createdBy");
+//            query.where(builder.equal(root.get("createdBy"), createdBy));
 //        }
-//        return shapes;
+//        return entityManager.createQuery(query).getResultList();
 //    }
 
-//    public List<Shape> getByArea(Double areaFrom, Double areaTo){
-//        List<Shape> shapes = repository.getAllByAreaBeforeAndAreaAfter(areaFrom, areaTo);
-//        if (shapes.isEmpty()){
-//            throw new RuntimeException();
-//        }
-//        return shapes;
-//    }
+
+}
+
 
 

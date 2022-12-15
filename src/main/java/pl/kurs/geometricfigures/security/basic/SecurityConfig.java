@@ -34,7 +34,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/shapes/*").hasRole("CREATOR")
                 .antMatchers(HttpMethod.DELETE, "/shapes/*").hasRole("CREATOR")
                 .and().csrf().disable().httpBasic();
-
-
     }
 }

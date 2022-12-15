@@ -13,13 +13,16 @@ import java.util.Map;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
-//@DiscriminatorValue(value = "square")
 public class Square extends Shape {
-    @Column(nullable = false)
     @Positive(message = "Width should be positive value")
     private double width;
+
+    public Square(double width) {
+        this.width = width;
+        super.setType("SQUARE");
+    }
 
     @Override
     public Double getArea() {

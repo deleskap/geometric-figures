@@ -13,15 +13,19 @@ import java.util.Map;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 public class Rectangle extends Shape {
-    @Column(nullable = false)
     @Positive(message = "Width should be positive value")
     private double width;
-    @Column(nullable = false)
     @Positive(message = "Height should be positive value")
     private double height;
+
+    public Rectangle(double width,double height) {
+        this.width = width;
+        this.height = height;
+        super.setType("RECTANGLE");
+    }
 
     @Override
     public Double getArea() {
