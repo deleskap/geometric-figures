@@ -21,9 +21,9 @@ public class RectangleToRectangleDtoConverter implements Converter<Rectangle, Re
                 .height(source.getHeight())
                 .version(source.getVersion())
                 .createdAt(source.getCreatedAt())
-                .createdBy(source.getCreatedBy())
+                .createdBy(source.getCreatedBy().getUsername())
                 .lastModifiedAt(source.getLastModifiedAt())
-                .lastModifiedBy(source.getLastModifiedBy())
+                .lastModifiedBy(source.getLastModifiedBy().getUsername())
                 .area(source.getArea())
                 .perimeter(source.getPerimeter())
                 .build();

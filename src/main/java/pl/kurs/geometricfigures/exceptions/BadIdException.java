@@ -1,6 +1,6 @@
 package pl.kurs.geometricfigures.exceptions;
 
-public class BadIdException extends RuntimeException{
+public class BadIdException extends RuntimeException {
 
     private Long badId;
 

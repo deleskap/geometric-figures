@@ -32,7 +32,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponseDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<String> errorMessages = e.getFieldErrors().stream()
@@ -45,6 +44,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ExceptionResponseDto> handleMethodArgumentNotValidException(BadRequestException e) {
         ExceptionResponseDto response = new ExceptionResponseDto(List.of(e.getMessage()), "BAD_REQUEST", LocalDateTime.now());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ClassNotFoundException.class)
+    public ResponseEntity<ExceptionResponseDto> handleClassNotFoundException(ClassNotFoundException e) {
+        ExceptionResponseDto response = new ExceptionResponseDto(List.of("Class not found exception", e.getMessage()), "BAD_REQUEST", LocalDateTime.now());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

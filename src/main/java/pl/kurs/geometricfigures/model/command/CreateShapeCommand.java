@@ -10,10 +10,10 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 public class CreateShapeCommand {
-    @NotNull(message = "Type can't be null")
-    @NotBlank(message = "Type can't be blank")
+    @NotNull
+    @NotBlank
     private String type;
 
-    @NotEmpty(message = "Parameters can't be empty")
+    @NotEmpty
     private Double[] parameters;
 }

@@ -21,9 +21,9 @@ public class CircleToCircleDtoConverter implements Converter<Circle, CircleDto>,
                 .radius(source.getRadius())
                 .version(source.getVersion())
                 .createdAt(source.getCreatedAt())
-                .createdBy(source.getCreatedBy())
+                .createdBy(source.getCreatedBy().getUsername())
                 .lastModifiedAt(source.getLastModifiedAt())
-                .lastModifiedBy(source.getLastModifiedBy())
+                .lastModifiedBy(source.getLastModifiedBy().getUsername())
                 .area(source.getArea())
                 .perimeter(source.getPerimeter())
                 .build();

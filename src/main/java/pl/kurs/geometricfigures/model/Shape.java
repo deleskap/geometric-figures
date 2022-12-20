@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import pl.kurs.geometricfigures.security.AppUser;
 import pl.kurs.geometricfigures.service.Identificationable;
 
 import javax.persistence.*;
@@ -20,8 +21,9 @@ import java.time.LocalDateTime;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Shape implements Serializable, Identificationable {
+public abstract class Shape implements Serializable, Identificationable, ShapeAreaAndPerimeterUtility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -30,14 +32,21 @@ public abstract class Shape implements Serializable, Identificationable {
     private int version;
     @CreatedDate
     private LocalDateTime createdAt;
+
     @CreatedBy
-    private String createdBy;
+    @ManyToOne
+    @JoinColumn(name = "createdBy_id", nullable = false)
+    private AppUser createdBy;
     @LastModifiedDate
     private LocalDateTime lastModifiedAt;
     @LastModifiedBy
-    private String lastModifiedBy;
+    @ManyToOne
+    @JoinColumn(name = "lastModifiedBy_id", nullable = false)
+    private AppUser lastModifiedBy;
 
+    @Column(name = "type", insertable = false, updatable = false)
     private String type;
+
 
     public abstract Double getArea();
 

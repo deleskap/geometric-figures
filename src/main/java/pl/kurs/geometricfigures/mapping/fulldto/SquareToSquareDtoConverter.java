@@ -20,9 +20,9 @@ public class SquareToSquareDtoConverter implements Converter<Square, SquareDto>,
                 .width(source.getWidth())
                 .version(source.getVersion())
                 .createdAt(source.getCreatedAt())
-                .createdBy(source.getCreatedBy())
+                .createdBy(source.getCreatedBy().getUsername())
                 .lastModifiedAt(source.getLastModifiedAt())
-                .lastModifiedBy(source.getLastModifiedBy())
+                .lastModifiedBy(source.getLastModifiedBy().getUsername())
                 .area(source.getArea())
                 .perimeter(source.getPerimeter())
                 .build();
