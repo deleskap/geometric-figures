@@ -1,6 +1,7 @@
 package pl.kurs.geometricfigures.controller;
 
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -10,10 +11,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.kurs.geometricfigures.factory.ShapeFactory;
 import pl.kurs.geometricfigures.model.Shape;
-import pl.kurs.geometricfigures.model.ShapeChange;
+import pl.kurs.geometricfigures.model.shapechange.ShapeChange;
 import pl.kurs.geometricfigures.model.command.CreateShapeCommand;
 import pl.kurs.geometricfigures.model.command.UpdateShapeCommand;
 import pl.kurs.geometricfigures.model.dto.fullDto.ShapeDto;
+import pl.kurs.geometricfigures.model.shapechange.ShapeChangeDto;
 import pl.kurs.geometricfigures.repository.ShapeChangeRepository;
 import pl.kurs.geometricfigures.repository.ShapeRepository;
 import pl.kurs.geometricfigures.security.AppRole;
@@ -23,6 +25,7 @@ import pl.kurs.geometricfigures.service.ShapeManagementService;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,6 +38,7 @@ public class ShapeController {
     private final ShapeFactory shapeFactory;
     private final ShapeChangeRepository shapeChangeRepository;
     private final ShapeRepository shapeRepository;
+    private final ModelMapper mapper;
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CREATOR')")
@@ -72,7 +76,6 @@ public class ShapeController {
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-
     @GetMapping()
     public ResponseEntity<List<ShapeDto>> getShapesByParameters(@RequestParam Map<String, Object> parameters) throws ClassNotFoundException {
 
@@ -82,4 +85,17 @@ public class ShapeController {
                 .collect(Collectors.toList());
         return new ResponseEntity<>(shapeDtoList, HttpStatus.OK);
     }
+
+
+    @GetMapping(("/{id}/changes"))
+    public ResponseEntity<List<ShapeChangeDto>> getChangesById(@PathVariable Long id) {
+
+        List<ShapeChange> shapeChangeList = shapeChangeRepository.findByShapeId(id);
+
+        List<ShapeChangeDto> changeDtoList =  shapeChangeList.stream().map(x -> mapper.map(x, ShapeChangeDto.class))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(changeDtoList, HttpStatus.OK);
+    }
+
+
 }

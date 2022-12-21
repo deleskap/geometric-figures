@@ -1,9 +1,10 @@
-package pl.kurs.geometricfigures.model;
+package pl.kurs.geometricfigures.model.shapechange;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import pl.kurs.geometricfigures.model.Shape;
 import pl.kurs.geometricfigures.security.AppUser;
 
 import javax.persistence.*;
