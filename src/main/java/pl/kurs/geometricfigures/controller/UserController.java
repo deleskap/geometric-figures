@@ -45,16 +45,16 @@ public class UserController {
     }
 
     @GetMapping("/api/v1/users")
-    public ResponseEntity<List<UserDto>> getUsers(@PageableDefault(page = 0, size = 20) Pageable pageable) {
+    public ResponseEntity<List<UserDto>> getUsers(@PageableDefault(size = 20) Pageable pageable) {
         Page<AppUser> userPage = repository.findAll(pageable);
         List<UserDto> userDtoPage = userPage.stream().map(x -> mapper.map(x, UserDto.class)).collect(Collectors.toList());
         return ResponseEntity.ok(userDtoPage);
     }
 
     @PostMapping(value = "/api/v1/users/refresh")
-    public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) {
+    public ResponseEntity<JwtResponse> createAuthenticationToken(@RequestBody JwtRequest jwtRequest) {
         final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+                .loadUserByUsername(jwtRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
