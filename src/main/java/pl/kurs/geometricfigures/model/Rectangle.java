@@ -1,5 +1,6 @@
 package pl.kurs.geometricfigures.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

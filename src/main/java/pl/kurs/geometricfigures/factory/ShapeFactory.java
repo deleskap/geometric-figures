@@ -35,12 +35,10 @@ public class ShapeFactory {
     public Shape createShape(CreateShapeCommand command) {
         if (!creators.containsKey(command.getType()))
             throw new BadRequestException("Typed shape not found!");
-        Shape shape = creators.get(command.getType().toUpperCase(Locale.ROOT)).create(command.getParameters());
-        return shape;
+        return creators.get(command.getType().toUpperCase(Locale.ROOT)).create(command.getParameters());
     }
 
     public ShapeDto createDto(Shape shape) {
-        ShapeDto dto = dtoCreators.get(shape.getClass().getSimpleName().toUpperCase(Locale.ROOT)).create(shape);
-        return dto;
+        return dtoCreators.get(shape.getClass().getSimpleName().toUpperCase(Locale.ROOT)).create(shape);
     }
 }

@@ -11,13 +11,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.kurs.geometricfigures.factory.ShapeFactory;
 import pl.kurs.geometricfigures.model.Shape;
-import pl.kurs.geometricfigures.model.shapechange.ShapeChange;
 import pl.kurs.geometricfigures.model.command.CreateShapeCommand;
 import pl.kurs.geometricfigures.model.command.UpdateShapeCommand;
 import pl.kurs.geometricfigures.model.dto.fullDto.ShapeDto;
+import pl.kurs.geometricfigures.model.shapechange.ShapeChange;
 import pl.kurs.geometricfigures.model.shapechange.ShapeChangeDto;
 import pl.kurs.geometricfigures.repository.ShapeChangeRepository;
-import pl.kurs.geometricfigures.repository.ShapeRepository;
 import pl.kurs.geometricfigures.security.AppRole;
 import pl.kurs.geometricfigures.security.AppUser;
 import pl.kurs.geometricfigures.service.ShapeManagementService;
@@ -25,11 +24,11 @@ import pl.kurs.geometricfigures.service.ShapeManagementService;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/shapes")
@@ -37,7 +36,6 @@ public class ShapeController {
     private final ShapeManagementService shapeManagementService;
     private final ShapeFactory shapeFactory;
     private final ShapeChangeRepository shapeChangeRepository;
-    private final ShapeRepository shapeRepository;
     private final ModelMapper mapper;
 
     @PostMapping
@@ -56,12 +54,18 @@ public class ShapeController {
     public ResponseEntity<ShapeDto> updateShape(@PathVariable Long id, @RequestBody UpdateShapeCommand command) throws NoSuchFieldException, IllegalAccessException {
         Shape returnedShape = shapeManagementService.get(id);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser user = (AppUser) authentication.getPrincipal();
+        AppUser user = null;
+        try {
+            user = (AppUser) authentication.getPrincipal();
+        } catch (Exception e) {
+            throw new AccessDeniedException("ACCESS_DENIED");
+        }
         boolean adminRole = user.getRoles().stream().map(AppRole::getAuthority).anyMatch(x -> x.equals("ROLE_ADMIN"));
         boolean creatorOfShape = shapeManagementService.isShapeCreator(id, user);
         if (!adminRole && !creatorOfShape) {
-            throw new AccessDeniedException("You do not have sufficient privileges to access this resource.");
+            throw new AccessDeniedException("ACCESS_DENIED");
         }
+
         ShapeChange change = new ShapeChange();
         Field field = returnedShape.getClass().getDeclaredField(command.getFieldName());
         field.setAccessible(true);
@@ -78,10 +82,8 @@ public class ShapeController {
 
     @GetMapping()
     public ResponseEntity<List<ShapeDto>> getShapesByParameters(@RequestParam Map<String, Object> parameters) throws ClassNotFoundException {
-
         List<Shape> shapeList = shapeManagementService.findShapes(parameters);
-        System.out.println(shapeList);
-        List<ShapeDto> shapeDtoList = shapeList.stream().map(x -> shapeFactory.createDto(x))
+        List<ShapeDto> shapeDtoList = shapeList.stream().map(shapeFactory::createDto)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(shapeDtoList, HttpStatus.OK);
     }
@@ -90,9 +92,20 @@ public class ShapeController {
     @GetMapping(("/{id}/changes"))
     public ResponseEntity<List<ShapeChangeDto>> getChangesById(@PathVariable Long id) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser user = null;
+        try {
+            user = (AppUser) authentication.getPrincipal();
+        } catch (Exception e) {
+            throw new AccessDeniedException("ACCESS_DENIED");
+        }
+        boolean adminRole = user.getRoles().stream().map(AppRole::getAuthority).anyMatch(x -> x.equals("ROLE_ADMIN"));
+        boolean creatorOfShape = shapeManagementService.isShapeCreator(id, user);
+        if (!adminRole && !creatorOfShape) {
+            throw new AccessDeniedException("ACCESS_DENIED");
+        }
         List<ShapeChange> shapeChangeList = shapeChangeRepository.findByShapeId(id);
-
-        List<ShapeChangeDto> changeDtoList =  shapeChangeList.stream().map(x -> mapper.map(x, ShapeChangeDto.class))
+        List<ShapeChangeDto> changeDtoList = shapeChangeList.stream().map(x -> mapper.map(x, ShapeChangeDto.class))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(changeDtoList, HttpStatus.OK);
     }

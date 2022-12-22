@@ -1,9 +1,6 @@
 package pl.kurs.geometricfigures.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.Column;

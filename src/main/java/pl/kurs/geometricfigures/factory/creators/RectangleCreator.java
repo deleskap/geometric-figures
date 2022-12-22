@@ -15,7 +15,7 @@ public class RectangleCreator implements ShapeCreator {
     @Override
     public Shape create(Double[] parameters) {
         if (parameters.length != 2)
-            throw new BadRequestException("Wrong parameters specified!");
+            throw new BadRequestException("WRONG_PARAMETERS");
         return new Rectangle(parameters[0], parameters[1]);
     }
 }

@@ -3,6 +3,7 @@ package pl.kurs.geometricfigures.service;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.kurs.geometricfigures.exceptions.BadEntityException;
+import pl.kurs.geometricfigures.exceptions.BadIdException;
 import pl.kurs.geometricfigures.exceptions.SpecificEntityNotFoundException;
 
 import javax.transaction.Transactional;
@@ -25,7 +26,6 @@ public class GenericManagementService<T extends Identificationable, R extends Jp
                 Optional.ofNullable(entity)
                         .filter(x -> x.getId() == null)
                         .orElseThrow(() -> new BadEntityException(entity))
-//                        .orElseThrow(() -> new RuntimeException())
         );
     }
 
@@ -34,8 +34,7 @@ public class GenericManagementService<T extends Identificationable, R extends Jp
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-//            throw new BadIdException("Id " + id + " not found for delete!", e, id);
-            throw new RuntimeException();
+            throw new BadIdException("Id " + id + " not found for delete!", e, id);
         }
     }
 
@@ -49,7 +48,6 @@ public class GenericManagementService<T extends Identificationable, R extends Jp
                         .filter(Objects::nonNull)
                         .orElseThrow(() -> new BadEntityException(entity))
         ).orElseThrow(() -> new BadEntityException(entity));
-//        ).orElseThrow(() -> new RuntimeException());
 
         loadedEntity = entity;
         return loadedEntity;
@@ -59,7 +57,6 @@ public class GenericManagementService<T extends Identificationable, R extends Jp
     @Override
     public T get(long id) {
         return repository.findById(id).orElseThrow(() -> new SpecificEntityNotFoundException(id));
-//        return repository.findById(id).orElseThrow(() -> new RuntimeException());
     }
 
     @Override

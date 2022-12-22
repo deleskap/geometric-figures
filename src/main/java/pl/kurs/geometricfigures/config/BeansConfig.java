@@ -26,6 +26,7 @@ public class BeansConfig {
         return modelMapper;
     }
 
+
     @Bean
     public AuditorAware<AppUser> auditorProvider() {
         return () -> Optional.of(((AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()));

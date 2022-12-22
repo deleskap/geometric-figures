@@ -10,6 +10,7 @@ import pl.kurs.geometricfigures.model.dto.fullDto.SquareDto;
 @Service
 @AllArgsConstructor
 public class SquareDtoCreator implements ShapeDtoCreator {
+
     private final ModelMapper mapper;
 
     @Override

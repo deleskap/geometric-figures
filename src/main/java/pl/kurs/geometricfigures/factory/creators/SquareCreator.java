@@ -15,7 +15,7 @@ public class SquareCreator implements ShapeCreator {
     @Override
     public Shape create(Double[] parameters) {
         if (parameters.length != 1)
-            throw new BadRequestException("Wrong parameters specified!");
+            throw new BadRequestException("WRONG_PARAMETERS");
         return new Square(parameters[0]);
     }
 }
