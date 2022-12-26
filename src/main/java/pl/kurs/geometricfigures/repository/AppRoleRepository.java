@@ -6,6 +6,5 @@ import pl.kurs.geometricfigures.security.AppRole;
 import java.util.Optional;
 
 public interface AppRoleRepository extends JpaRepository<AppRole, Integer> {
-
     Optional<AppRole> findFirstByName(String name);
 }

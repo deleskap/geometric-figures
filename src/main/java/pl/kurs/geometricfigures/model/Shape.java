@@ -3,6 +3,8 @@ package pl.kurs.geometricfigures.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.Subselect;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -19,11 +21,10 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
-@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @EntityListeners(AuditingEntityListener.class)
-public abstract class Shape implements Serializable, Identificationable, ShapeAreaAndPerimeterUtility {
+public abstract class Shape implements Serializable, Identificationable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -43,10 +44,6 @@ public abstract class Shape implements Serializable, Identificationable, ShapeAr
     @ManyToOne
     @JoinColumn(name = "lastModifiedBy_id", nullable = false)
     private AppUser lastModifiedBy;
-
-    @Column(name = "type", insertable = false, updatable = false)
-    private String type;
-
 
     public abstract Double getArea();
 

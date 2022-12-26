@@ -2,11 +2,12 @@ package pl.kurs.geometricfigures.service;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 import pl.kurs.geometricfigures.exceptions.BadEntityException;
 import pl.kurs.geometricfigures.exceptions.BadIdException;
 import pl.kurs.geometricfigures.exceptions.SpecificEntityNotFoundException;
 
-import javax.transaction.Transactional;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,7 +16,6 @@ public class GenericManagementService<T extends Identificationable, R extends Jp
 
     protected R repository;
 
-    //TODO exceptions, globalexceptionhandler
     public GenericManagementService(R repository) {
         this.repository = repository;
     }
@@ -38,7 +38,6 @@ public class GenericManagementService<T extends Identificationable, R extends Jp
         }
     }
 
-    //dirty checking - metoda @Transactional, wczytujemy encje powiązaną z kontekstem utrwalania, przypisujemy nową encje
     @Override
     @Transactional
     public T edit(T entity) {

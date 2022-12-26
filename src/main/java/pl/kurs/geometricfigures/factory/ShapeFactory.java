@@ -1,14 +1,12 @@
 package pl.kurs.geometricfigures.factory;
 
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import pl.kurs.geometricfigures.exceptions.BadRequestException;
 import pl.kurs.geometricfigures.factory.creators.ShapeCreator;
-import pl.kurs.geometricfigures.factory.dto.ShapeDtoCreator;
 import pl.kurs.geometricfigures.model.Shape;
+import pl.kurs.geometricfigures.model.ShapeView;
 import pl.kurs.geometricfigures.model.command.CreateShapeCommand;
 import pl.kurs.geometricfigures.model.dto.fullDto.ShapeDto;
-import pl.kurs.geometricfigures.security.JwtUserDetailsService;
 
 import java.util.Locale;
 import java.util.Map;
@@ -19,17 +17,10 @@ import java.util.stream.Collectors;
 @Service
 public class ShapeFactory {
     private final Map<String, ShapeCreator> creators;
-    private final Map<String, ShapeDtoCreator> dtoCreators;
-    private final JwtUserDetailsService service;
-    private final AuditorAware<String> auditorAware;
 
 
-    public ShapeFactory(Set<ShapeCreator> creators, Set<ShapeDtoCreator> dtoCreators,
-                        JwtUserDetailsService service, AuditorAware auditorAware) {
+    public ShapeFactory(Set<ShapeCreator> creators) {
         this.creators = creators.stream().collect(Collectors.toMap(ShapeCreator::getType, Function.identity()));
-        this.dtoCreators = dtoCreators.stream().collect(Collectors.toMap(ShapeDtoCreator::getType, Function.identity()));
-        this.service = service;
-        this.auditorAware = auditorAware;
     }
 
     public Shape createShape(CreateShapeCommand command) {
@@ -39,6 +30,11 @@ public class ShapeFactory {
     }
 
     public ShapeDto createDto(Shape shape) {
-        return dtoCreators.get(shape.getClass().getSimpleName().toUpperCase(Locale.ROOT)).create(shape);
+        return creators.get(shape.getClass().getSimpleName().toUpperCase(Locale.ROOT)).createDto(shape);
     }
+
+    public ShapeDto createDtoFromView(ShapeView shapeView) {
+        return creators.get(shapeView.getType().toUpperCase(Locale.ROOT)).createDtoFromView(shapeView);
+    }
+
 }

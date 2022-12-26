@@ -1,0 +1,21 @@
+<html lang="pl-PL" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Raport o stworzonych figurach</title>
+</head>
+<body>
+<h1>Raport o stworzonych figurach</h1>
+<p>W dniu <span th:text="${date}"></span> zostało stworzonych łącznie <span th:text="${count}"></span> figur:</p>
+<ul>
+    <li th:each="entry : ${subclassCounts}">
+       Ilość <span th:text="${entry.key}"></span>: <span th:text="${entry.value}"></span>
+    </li>
+</ul>
+<h3>Użytkownik:</h3>
+<ul>
+    <li th:each="entry : ${users}">
+        <span th:text="${entry.key}"></span>: <span th:text="${entry.value}"></span> figur
+    </li>
+</ul>
+</body>
+</html>

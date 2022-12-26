@@ -10,6 +10,7 @@ import pl.kurs.geometricfigures.exceptions.BadIdException;
 import pl.kurs.geometricfigures.exceptions.BadRequestException;
 import pl.kurs.geometricfigures.exceptions.SpecificEntityNotFoundException;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
