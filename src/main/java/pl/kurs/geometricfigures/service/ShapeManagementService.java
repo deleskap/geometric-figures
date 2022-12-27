@@ -148,7 +148,7 @@ public class ShapeManagementService extends GenericManagementService<Shape, Shap
                 .collect(Collectors.groupingBy(shape -> shape.getCreatedBy().getUsername(), Collectors.counting()));
 
         Context context = new Context();
-        context.setVariable("date", LocalDate.now());
+        context.setVariable("date", LocalDate.now().minusDays(1));
         context.setVariable("count", count);
         context.setVariable("subclassCounts", subclassCounts);
         context.setVariable("users", users);
